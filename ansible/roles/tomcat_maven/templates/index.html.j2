@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LionTech Tomcat Maven Server</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #15211c;
+      background: #f3f7f4;
+    }
+    main {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 72px 24px;
+    }
+    section {
+      background: #fff;
+      border: 1px solid #dbe5de;
+      border-radius: 8px;
+      padding: 32px;
+      box-shadow: 0 16px 44px rgba(17, 48, 40, 0.08);
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: 42px;
+    }
+    p {
+      line-height: 1.7;
+      color: #5e6b64;
+    }
+    code {
+      background: #edf4ef;
+      padding: 4px 7px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <section>
+    <h1>Tomcat and Maven Server</h1>
+    <p>This server is managed by Ansible for LionTech Solutions. Apache Tomcat is running on port <code>{{ tomcat_port }}</code> and Maven is installed for Java build workloads.</p>
+    <p>Deploy WAR files to this Tomcat host after building with Maven.</p>
+  </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,28 @@
+---
+- name: Prepare all DevOps tool servers
+  hosts: devops_tools
+  become: true
+  gather_facts: true
+  roles:
+    - common
+
+- name: Install and configure Sonatype Nexus Repository
+  hosts: nexus
+  become: true
+  gather_facts: true
+  roles:
+    - nexus
+
+- name: Install and configure SonarQube
+  hosts: sonarqube
+  become: true
+  gather_facts: true
+  roles:
+    - sonarqube
+
+- name: Install and configure Tomcat and Maven
+  hosts: tomcat_maven
+  become: true
+  gather_facts: true
+  roles:
+    - tomcat_maven

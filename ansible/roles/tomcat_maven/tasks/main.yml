@@ -1,0 +1,69 @@
+---
+- name: Install Tomcat and Maven packages
+  ansible.builtin.apt:
+    name:
+      - "{{ tomcat_package }}"
+      - "{{ tomcat_admin_package }}"
+      - "{{ maven_package }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Configure Tomcat manager user
+  ansible.builtin.template:
+    src: tomcat-users.xml.j2
+    dest: "{{ tomcat_user_file }}"
+    owner: root
+    group: tomcat
+    mode: "0640"
+  no_log: true
+  notify: Restart Tomcat
+
+- name: Ensure Tomcat ROOT webapp exists
+  ansible.builtin.file:
+    path: "{{ tomcat_root_webapp_dir }}"
+    state: directory
+    owner: tomcat
+    group: tomcat
+    mode: "0755"
+
+- name: Install Tomcat landing page
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: "{{ tomcat_root_webapp_dir }}/index.html"
+    owner: tomcat
+    group: tomcat
+    mode: "0644"
+  notify: Restart Tomcat
+
+- name: Enable and start Tomcat
+  ansible.builtin.systemd:
+    name: "{{ tomcat_service_name }}"
+    enabled: true
+    state: started
+    daemon_reload: true
+
+- name: Verify Maven installation
+  ansible.builtin.command:
+    cmd: mvn -version
+  register: maven_version
+  changed_when: false
+
+- name: Wait for Tomcat HTTP endpoint
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:{{ tomcat_port }}"
+    status_code:
+      - 200
+      - 302
+      - 401
+    timeout: 10
+  register: tomcat_health
+  retries: "{{ service_wait_retries }}"
+  delay: "{{ service_wait_delay }}"
+  until: tomcat_health.status in [200, 302, 401]
+
+- name: Show Tomcat and Maven access details
+  ansible.builtin.debug:
+    msg:
+      - "Tomcat URL: {{ service_url | default('http://' ~ ansible_host ~ ':' ~ tomcat_port) }}"
+      - "{{ maven_version.stdout_lines[0] | default('Maven installed') }}"

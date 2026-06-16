@@ -41,10 +41,10 @@ cd ../ansible
 ansible-playbook playbook.yml
 ```
 
-If a previous run created a root-owned Ansible temp directory and you see an unreachable error for `/tmp/.ansible/tmp`, rerun after pulling the latest code. The project now uses `/tmp/ansible-ubuntu/tmp`. If the host still has a locked temp path, remove the old directory once:
+If a previous run created a root-owned Ansible temp directory and you see an unreachable error for `/tmp/.ansible/tmp` or `/tmp/ansible-ubuntu/tmp`, rerun after pulling the latest code and regenerating the inventory. The project now uses `/home/ubuntu/.ansible/tmp`. If the host still has a locked temp path, remove the old directories once:
 
 ```bash
-ssh -i ~/.ssh/rancher0529.pem ubuntu@SERVER_PUBLIC_IP 'sudo rm -rf /tmp/.ansible'
+ssh -i ~/.ssh/rancher0529.pem ubuntu@SERVER_PUBLIC_IP 'sudo rm -rf /tmp/.ansible /tmp/ansible-ubuntu && mkdir -p /home/ubuntu/.ansible/tmp && chmod 700 /home/ubuntu/.ansible /home/ubuntu/.ansible/tmp'
 ```
 
 ## Default URLs

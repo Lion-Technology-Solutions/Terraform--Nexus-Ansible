@@ -54,6 +54,7 @@ Terraform prints service URLs after apply:
 - Nexus: `http://NEXUS_PUBLIC_IP:8081`
 - SonarQube: `http://SONAR_PUBLIC_IP:9000`
 - Tomcat: `http://TOMCAT_PUBLIC_IP:8080`
+- Tomcat Manager: `http://TOMCAT_PUBLIC_IP:8080/manager/html`
 
 ## Important Production Notes
 
@@ -61,6 +62,7 @@ Terraform prints service URLs after apply:
 - Change `sonarqube_db_password` and `tomcat_admin_password` in Ansible group vars.
 - Nexus first admin password is created by Nexus under `/opt/sonatype-work/nexus3/admin.password`.
 - SonarQube default web login is `admin/admin` on first login unless changed through the UI.
+- Tomcat Manager login is configured by Ansible using `tomcat_admin_user` and `tomcat_admin_password`.
 
 ## Destroy
 

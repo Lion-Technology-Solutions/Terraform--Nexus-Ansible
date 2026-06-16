@@ -8,3 +8,8 @@ tomcat_admin_user: admin
 tomcat_admin_password: "ChangeMeTomcatAdmin123!"
 maven_package: maven
 tomcat_root_webapp_dir: /var/lib/tomcat10/webapps/ROOT
+tomcat_manager_context_paths:
+  - /usr/share/tomcat10-admin/manager/META-INF/context.xml
+  - /usr/share/tomcat10-admin/host-manager/META-INF/context.xml
+  - /var/lib/tomcat10/webapps/manager/META-INF/context.xml
+  - /var/lib/tomcat10/webapps/host-manager/META-INF/context.xml

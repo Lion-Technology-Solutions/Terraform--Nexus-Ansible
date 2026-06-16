@@ -19,6 +19,23 @@
   no_log: true
   notify: Restart Tomcat
 
+- name: Check Tomcat manager context files
+  ansible.builtin.stat:
+    path: "{{ item }}"
+  loop: "{{ tomcat_manager_context_paths }}"
+  register: tomcat_manager_context_stats
+
+- name: Allow remote Tomcat manager login
+  ansible.builtin.template:
+    src: manager-context.xml.j2
+    dest: "{{ item.stat.path }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop: "{{ tomcat_manager_context_stats.results }}"
+  when: item.stat.exists
+  notify: Restart Tomcat
+
 - name: Ensure Tomcat ROOT webapp exists
   ansible.builtin.file:
     path: "{{ tomcat_root_webapp_dir }}"
@@ -65,5 +82,6 @@
 - name: Show Tomcat and Maven access details
   ansible.builtin.debug:
     msg:
-      - "Tomcat URL: {{ service_url | default('http://' ~ ansible_host ~ ':' ~ tomcat_port) }}"
+      - "Tomcat Manager URL: {{ service_url | default('http://' ~ ansible_host ~ ':' ~ tomcat_port) }}/manager/html"
+      - "Tomcat admin user: {{ tomcat_admin_user }}"
       - "{{ maven_version.stdout_lines[0] | default('Maven installed') }}"

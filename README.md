@@ -59,10 +59,12 @@ Terraform prints service URLs after apply:
 ## Important Production Notes
 
 - Restrict `ssh_allowed_cidr` and `service_allowed_cidr` in `terraform.tfvars`.
-- Change `sonarqube_db_password` and `tomcat_admin_password` in Ansible group vars.
+- Change `sonarqube_db_password`, `tomcat_admin_password`, and `tomcat_script_password` in Ansible group vars.
 - Nexus first admin password is created by Nexus under `/opt/sonatype-work/nexus3/admin.password`.
 - SonarQube default web login is `admin/admin` on first login unless changed through the UI.
-- Tomcat Manager login is configured by Ansible using `tomcat_admin_user` and `tomcat_admin_password`.
+- Tomcat Manager browser login is configured by Ansible using `tomcat_admin_user` and `tomcat_admin_password`.
+- Tomcat Manager scripted deployment uses `tomcat_script_user` and `tomcat_script_password`.
+- Do not grant `manager-script` to the browser login user; Tomcat recommends keeping `manager-gui` and `manager-script` on separate accounts.
 
 ## Destroy
 

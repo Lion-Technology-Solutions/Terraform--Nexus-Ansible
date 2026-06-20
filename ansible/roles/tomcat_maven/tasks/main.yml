@@ -79,9 +79,25 @@
   delay: "{{ service_wait_delay }}"
   until: tomcat_health.status in [200, 302, 401]
 
+- name: Verify Tomcat Manager login from localhost
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:{{ tomcat_port }}/manager/html"
+    user: "{{ tomcat_admin_user }}"
+    password: "{{ tomcat_admin_password }}"
+    force_basic_auth: true
+    status_code:
+      - 200
+    timeout: 10
+  register: tomcat_manager_login
+  retries: "{{ service_wait_retries }}"
+  delay: "{{ service_wait_delay }}"
+  until: tomcat_manager_login.status == 200
+  no_log: true
+
 - name: Show Tomcat and Maven access details
   ansible.builtin.debug:
     msg:
       - "Tomcat Manager URL: {{ service_url | default('http://' ~ ansible_host ~ ':' ~ tomcat_port) }}/manager/html"
-      - "Tomcat admin user: {{ tomcat_admin_user }}"
+      - "Tomcat Manager GUI user: {{ tomcat_admin_user }}"
+      - "Tomcat Manager script user: {{ tomcat_script_user }}"
       - "{{ maven_version.stdout_lines[0] | default('Maven installed') }}"
